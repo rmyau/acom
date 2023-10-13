@@ -5,8 +5,8 @@ import numpy as np
 cap = cv2.VideoCapture(0)
 
 # определение диапазона красного цвета в HSV
-lower_red = np.array([0, 120, 100])  # минимальные значения оттенка, насыщенности и яркости
-upper_red = np.array([60, 255, 255])  # максимальные значения оттенка, насыщенности и яркости
+lower_red = np.array([0, 120, 80])  # минимальные значения оттенка, насыщенности и яркости
+upper_red = np.array([15, 255, 255])  # максимальные значения оттенка, насыщенности и яркости
 color = (0, 0, 0)
 thickness = 4 # толщина
 
@@ -22,7 +22,7 @@ while True:
     opening = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
     # Операция закрытия-1)дилатации, 2) операция эрозии.
     closing = cv2.morphologyEx(opening, cv2.MORPH_CLOSE, kernel)
-    moments = cv2.moments(closing)
+    moments = cv2.moments(closing, True)
     m01 = moments['m01']
     m10 = moments['m10']
     area = moments['m00']
@@ -31,7 +31,9 @@ while True:
         posX = int(m10 // area)
         posY = int(m01 // area)
         width = height = int(np.sqrt(area))
-        cv2.rectangle(frame, (posX - (width // 20), posY - (height // 20)), (posX + (width // 20), posY + (height // 20)), color, thickness)
+        # cv2.rectangle(frame, (posX - (width // 2), posY - 2), (posX +(width // 2), posY+2), color, thickness)
+        # cv2.rectangle(frame, (posX - 2, posY -(height // 2) ), (posX + 2, posY + (height // 2)), color, thickness)
+        cv2.ellipse(frame, (posX,posY), (width//2, height//2+10), 5, 0, 360,(0,0,0), 4)
     cv2.imshow('HSV_frame', mask)
     cv2.imshow('Result_frame', frame)
     if cv2.waitKey(1) & 0xFF == 27:
