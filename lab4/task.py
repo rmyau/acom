@@ -83,7 +83,7 @@ def get_offset(angle):
     return x_shift, y_shift
 
 
-def main(path, standard_deviation, kernel_size, bound_path, operator):
+def main(path, standard_deviation, kernel_size, lower_bound, upper_bound, operator):
     # Задание 1 - чтение строки полного адреса изображения и размытие Гаусса
     img = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
     imgBlur_CV2 = cv2.GaussianBlur(img, (kernel_size, kernel_size), standard_deviation)
@@ -148,10 +148,6 @@ def main(path, standard_deviation, kernel_size, bound_path, operator):
 
     # Задание 4 - двойная пороговая фильтрация
 
-    # задание пороговых границ для градиента.
-    max_gradient = np.max(matr_gradient)
-    lower_bound = max_gradient / bound_path
-    upper_bound = max_gradient - max_gradient / bound_path
     # инициализация массива результата
     double_filtration = np.zeros(img.shape)
 
@@ -174,11 +170,12 @@ def main(path, standard_deviation, kernel_size, bound_path, operator):
                 # если значение градиента выше - верхней границы, то пиксель точно граница
                 elif (gradient > upper_bound):
                     double_filtration[i][j] = 255
-    cv2.imshow('standard_deviation=' + str(standard_deviation) + ' kernel='
-               + str(kernel_size) + ' bound=' + str(bound_path) + ' operator - ' + str(operator), double_filtration)
+    cv2.imshow('deviation=' + str(standard_deviation) + ' kernel='
+               + str(kernel_size) + ' bound low =' + str(lower_bound) + ' bound upper =' + str(
+        upper_bound) + ' operator - ' + str(operator), double_filtration)
 
 
-main('../images/test_512.jpg', 10, 3, 5, 'sobel')
-main('../images/test_512.jpg', 100, 7, 7, 'sobel')
+main('../images/test_512.jpg', 10, 3, 0.2, 0.4, 'sobel')
+main('../images/test_512.jpg', 100, 3, 0.15, 0.85, 'sobel')
 # main('../images/test_512.jpg', 20, 3, 7, 'previtta')
 cv2.waitKey(0)
