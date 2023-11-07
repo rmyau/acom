@@ -1,5 +1,6 @@
 import utils
-
+import cv2
+import numpy as np
 
 # подавление немаксимумов
 def suppression_nonmaximums(img, matr_gradient, img_angles):
@@ -42,7 +43,7 @@ def double_filtration(img, img_border, matr_gradient, lower_bound, upper_bound):
                 elif (gradient > upper_bound):
                     double_filtration[i][j] = 255
     return double_filtration
-def canny(path, standard_deviation, kernel_size, lower_bound, upper_bound, operator):
+def method_canny(path, standard_deviation, kernel_size, lower_bound, upper_bound, operator):
     # чтение строки полного адреса изображения и размытие Гаусса
     img = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
     imgBlur_CV2 = cv2.GaussianBlur(img, (kernel_size, kernel_size), standard_deviation)
@@ -74,14 +75,14 @@ def canny(path, standard_deviation, kernel_size, lower_bound, upper_bound, opera
     img_angles = img.copy()
     for i in range(img.shape[0]):
         for j in range(img.shape[1]):
-            img_angles[i][j] = get_angle_number(img_Gx[i][j], img_Gy[i][j])
+            img_angles[i][j] = utils.get_angle_number(img_Gx[i][j], img_Gy[i][j])
 
     # подавление немаксимумов
-    img_border = suppression_nonmaximums(img, matr_gradient)
+    img_border = suppression_nonmaximums(img, matr_gradient, img_angles)
 
     # двойная пороговая фильтрация
     img_filtration = double_filtration(img, img_border, matr_gradient, lower_bound, upper_bound)
 
-    cv2.imshow('deviation=' + str(standard_deviation) + ' kernel='
-               + str(kernel_size) + ' bound low =' + str(lower_bound) + ' bound upper =' + str(
-        upper_bound) + ' operator - ' + str(operator), double_filtration)
+    img_path='dev' + str(standard_deviation) + '_ker' + str(kernel_size) + '_blow' + str(lower_bound) + '_bupper' + str(
+        upper_bound) + '_operator-' + str(operator)
+    cv2.imwrite(f'images/output/{img_path}.jpg', img_filtration)
