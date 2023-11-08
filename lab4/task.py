@@ -108,7 +108,6 @@ def main(path, standard_deviation, kernel_size, lower_bound, upper_bound, operat
     # нахождение матрицы длины вектора градиентаfind
     matr_gradient = np.sqrt(img_Gx ** 2 + img_Gy ** 2)
     # # нормализация - получаем все значения к виду от 0 до 1
-    cv2.imshow('grad', matr_gradient)
     max_gradient = np.max(matr_gradient)
     matr_gradient = matr_gradient / max_gradient
 
@@ -118,12 +117,12 @@ def main(path, standard_deviation, kernel_size, lower_bound, upper_bound, operat
         for j in range(img.shape[1]):
             img_angles[i][j] = get_angle_number(img_Gx[i][j], img_Gy[i][j])
 
-    print('Матрица значений длин градиента:')
-    print(matr_gradient)
-
-    # вывод
-    print('Матрица значений углов градиента:')
-    print(img_angles)
+    # print('Матрица значений длин градиента:')
+    # print(matr_gradient)
+    #
+    # # вывод
+    # print('Матрица значений углов градиента:')
+    # print(img_angles)
 
     # Задание 3 - подавление немаксимумов
 
