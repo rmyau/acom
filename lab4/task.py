@@ -86,9 +86,10 @@ def get_offset(angle):
 def main(path, standard_deviation, kernel_size, lower_bound, upper_bound, operator):
     # Задание 1 - чтение строки полного адреса изображения и размытие Гаусса
     img = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
-    imgBlur_CV2 = cv2.GaussianBlur(img, (kernel_size, kernel_size), standard_deviation)
-    # cv2.imshow('Blur_Imagine', imgBlur_CV2)
     cv2.imshow('Original_image', img)
+    img = cv2.GaussianBlur(img, (kernel_size, kernel_size), standard_deviation)
+    # cv2.imshow('Blur_Imagine', imgBlur_CV2)
+
 
     # Задание 2 - вычисление и вывод матрицы значений длин и матрицы значений углов градиентов
     if operator == 'sobel':
@@ -142,8 +143,8 @@ def main(path, standard_deviation, kernel_size, lower_bound, upper_bound, operat
                 is_max = gradient >= matr_gradient[i + y_shift][j + x_shift] and gradient >= matr_gradient[i - y_shift][
                     j - x_shift]
                 img_border[i][j] = 255 if is_max else 0
-    cv2.imshow('img_border', img_border)
-    cv2.imwrite('border.jpg', img_border)
+    # cv2.imshow('img_border', img_border)
+    # cv2.imwrite('border.jpg', img_border)
 
     # Задание 4 - двойная пороговая фильтрация
 
